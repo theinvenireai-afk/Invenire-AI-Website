@@ -21,12 +21,14 @@
   html{scroll-behavior:smooth}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
 
-  nav{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:var(--ink)}
-  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--blue-mid);text-decoration:none}
-  .nav-links{display:flex;gap:2rem;list-style:none}
+  /* NAV — 3-column grid (logo | centered links | balance) keeps the
+     links truly centered in the bar regardless of logo width. */
+  nav{position:fixed;top:0;left:0;width:100%;z-index:100;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:1.5rem;padding:1rem 3rem;background:var(--ink)}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--blue-mid);text-decoration:none;justify-self:start}
+  .nav-links{display:flex;gap:2rem;list-style:none;justify-self:center}
   .nav-links a{color:#ffffffbb;text-decoration:none;font-size:.9rem;font-weight:500;transition:color .2s}
   .nav-links a:hover{color:var(--blue-mid)}
-  .nav-cta{background:var(--accent);color:#fff;padding:.5rem 1.3rem;border-radius:2rem;text-decoration:none;font-weight:700;font-size:.9rem;transition:background .2s}
+  .nav-cta{background:var(--accent);color:#fff;padding:.5rem 1.3rem;border-radius:2rem;text-decoration:none;font-weight:700;font-size:.9rem;transition:background .2s;justify-self:end}
   .nav-cta:hover{background:var(--blue-deep)}
 
   .hero{min-height:100vh;display:grid;place-items:center;background:var(--ink);position:relative;overflow:hidden;padding:7rem 3rem 4rem;text-align:center}
@@ -110,8 +112,8 @@
     <li><a href="#mission">Mission</a></li>
     <li><a href="#team">Team</a></li>
     <li><a href="workshops.html">Workshops</a></li>
+    <li><a href="workshop-info.html">Workshop Info</a></li>
   </ul> 
-  <a href="#signup" class="nav-cta">Sign Up →</a> <!-- Add link -->
 </nav>
 
 <section class="hero">
@@ -178,8 +180,8 @@
     <div class="team-grid">
 
       <div class="team-card">
-        <div class="avatar">C</div>
-        <p class="team-name" style="background:linear-gradient(135deg,#5f97af,#0d4a7a)">Chaitanya</p>
+        <div class="avatar" style="background:linear-gradient(135deg,#5f97af,#67a5d4)">C</div>
+        <p class="team-name">Chaitanya</p>
         <p class="team-role">Co-Founder</p>
         <a href="https://www.linkedin.com/in/chaitanya-kakarla-4311a9390/" target="_blank" class="linkedin-link">
         LinkedIn

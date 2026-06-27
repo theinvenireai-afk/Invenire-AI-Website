@@ -37,18 +37,51 @@
   .formats-section{background:var(--white)}
   .format-intro{max-width:660px;margin-bottom:2.5rem}
   .format-intro p{font-size:1.05rem;line-height:1.75;color:#3a5068;margin-top:.75rem}
-  .format-cards{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
-  .format-card{border-radius:1.5rem;overflow:hidden;background:var(--bg);border:2px solid var(--blue-light);transition:border-color .2s,transform .2s,box-shadow .2s;display:flex;flex-direction:column}
-  .format-card:hover{border-color:var(--accent);transform:translateY(-5px);box-shadow:0 12px 36px #0096d618}
+  .format-cards{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;gap:2rem}
+
+  /* Flip-card mechanics: .format-card sets the perspective, .fc-flip is the
+     element that actually rotates, .fc-front/.fc-back are the two faces. */
+  .format-card{perspective:2200px;transition:transform .25s}
+  .format-card:hover{transform:translateY(-5px)}
+  .fc-flip{position:relative;width:100%;height:100%;display:grid;transition:transform .7s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d}
+  .format-card.flipped .fc-flip{transform:rotateY(180deg)}
+
+  /* Both faces sit in the same grid cell instead of being pinned to a fixed
+     height — the grid row auto-sizes to whichever face is tallest, so the
+     card grows to fit its content and neither face ever needs to scroll. */
+  .fc-front,.fc-back{grid-row:1;grid-column:1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:1.5rem;border:2px solid var(--blue-light);display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+  .format-card:hover .fc-front,.format-card:hover .fc-back{border-color:var(--accent);box-shadow:0 12px 36px #0096d618}
+
+  .fc-front{background:var(--bg)}
   .fc-top{padding:2rem;border-bottom:2px solid var(--blue-light)}
   .fc-icon{font-size:3rem;margin-bottom:1rem}
   .fc-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.5rem}
   .fc-dur{display:inline-block;background:var(--blue-light);color:var(--blue-deep);font-size:.8rem;font-weight:700;padding:.35rem .9rem;border-radius:1rem}
+
   .fc-body{padding:2rem;flex:1;display:flex;flex-direction:column;gap:1rem}
   .fc-body p{font-size:.95rem;line-height:1.75;color:#4a6880}
   .fc-for{font-size:.85rem;font-weight:600;color:var(--blue-deep);background:var(--blue-light);padding:.5rem 1rem;border-radius:.75rem;display:inline-block;margin-top:auto}
-  .fc-cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;background:var(--accent);color:#fff;padding:.7rem 1.5rem;border-radius:2rem;font-weight:700;font-size:.9rem;text-decoration:none;transition:background .2s;width:fit-content}
+
+  .fc-actions{display:flex;gap:.75rem;flex-wrap:wrap}
+  .fc-more-btn{flex:1 1 160px;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:transparent;border:2px solid var(--blue-mid);color:var(--blue-deep);font-weight:700;font-size:.85rem;padding:.7rem 1rem;border-radius:2rem;cursor:pointer;font-family:inherit;transition:border-color .2s,background .2s}
+  .fc-more-btn:hover{border-color:var(--accent);background:var(--blue-light)}
+  .fc-arrow{display:inline-block;font-size:.95rem;transition:transform .5s}
+  .format-card.flipped .fc-arrow{transform:rotate(180deg)}
+
+  .fc-cta{flex:1 1 160px;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:var(--accent);color:#fff;padding:.7rem 1rem;border-radius:2rem;font-weight:700;font-size:.85rem;text-decoration:none;transition:background .2s}
   .fc-cta:hover{background:var(--blue-deep)}
+
+  /* Back face: the "reveal" — dark so it reads clearly as the flip side */
+  .fc-back{background:var(--blue-deep);transform:rotateY(180deg);padding:1.75rem 2rem;color:#fff;gap:0}
+  .fc-back-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:2px solid #ffffff25;padding-bottom:1rem;flex-shrink:0}
+  .fc-back-top h4{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.01em}
+  .fc-flip-back{background:transparent;border:2px solid #ffffff55;color:#fff;font-weight:700;font-size:.78rem;padding:.5rem 1rem;border-radius:2rem;cursor:pointer;font-family:inherit;flex-shrink:0;transition:border-color .2s,background .2s}
+  .fc-flip-back:hover{border-color:#fff;background:#ffffff18}
+
+  .fc-schedule{list-style:none;flex:1;margin-top:.25rem}
+  .fc-schedule li{font-size:.85rem;line-height:1.6;color:#ffffffcc;padding:.75rem 0;border-bottom:1px solid #ffffff1a}
+  .fc-schedule li:last-child{border-bottom:none}
+  .fc-schedule li strong{color:#fff}
 
   /* COMING SOON BANNER */
   .coming-soon{background:var(--blue-light);border-radius:1.25rem;padding:2rem;margin-top:2rem;text-align:center;border:2px dashed var(--blue-mid)}
@@ -90,14 +123,15 @@
   .cfb{display:inline-flex;align-items:center;gap:.4rem;background:transparent;color:var(--accent);border:2px solid var(--accent);padding:.6rem 1.25rem;border-radius:2rem;font-weight:700;font-size:.85rem;text-decoration:none;transition:background .2s,color .2s}
   .cfb:hover{background:var(--accent);color:#fff}
 
-  /* CTA */
-  .cta-band{background:var(--blue-deep);color:#fff;text-align:center;padding:5rem 3rem}
-  .cta-band h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800}
-  .cta-band p{margin-top:1rem;font-size:1.05rem;opacity:.85;max-width:560px;margin-left:auto;margin-right:auto}
-  .cta-btns{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
-  .btn-w{background:#fff;color:var(--blue-deep);padding:.85rem 2rem;border-radius:2rem;font-weight:700;text-decoration:none;font-size:1rem;transition:transform .15s}
+  /* SIGNUP / CTA BAND */
+  .signup{background:var(--blue-deep);color:#fff;text-align:center;padding:5rem 3rem}
+  .signup h2{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800}
+  .signup p{margin-top:1rem;font-size:1.05rem;opacity:.85;max-width:560px;margin-left:auto;margin-right:auto}
+  .su-btns{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
+  .btn-w{background:#fff;color:var(--blue-deep);padding:.85rem 2rem;border-radius:2rem;font-weight:700;text-decoration:none;font-size:1rem;transition:transform .15s;display:inline-block}
   .btn-w:hover{transform:translateY(-2px)}
-  .btn-ow{background:transparent;color:#fff;border:2px solid #ffffff55;padding:.85rem 2rem;border-radius:2rem;font-weight:600;text-decoration:none;font-size:1rem}
+  .btn-ow{background:transparent;color:#fff;border:2px solid #ffffff55;padding:.85rem 2rem;border-radius:2rem;font-weight:600;font-size:1rem;cursor:pointer;font-family:inherit;transition:border-color .2s,transform .15s}
+  .btn-ow:hover{border-color:#fff;transform:translateY(-2px)}
 
   footer{background:#060f1e;color:#fff;padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem}
   .footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--blue-mid);display:block;margin-bottom:.6rem;text-decoration:none}
@@ -107,7 +141,13 @@
   .footer-col a:hover{color:var(--blue-mid)}
   .footer-bottom{background:#060f1e;border-top:1px solid #ffffff08;padding:1.2rem 3rem;text-align:center;color:#ffffff22;font-size:.78rem}
 
-  @media(max-width:900px){.format-cards,.cf-body{grid-template-columns:1fr}nav{padding:1rem 1.5rem}.nav-links{display:none}section{padding:3rem 1.5rem}footer{grid-template-columns:1fr}}
+  @media(max-width:900px){
+    .format-cards,.cf-body{grid-template-columns:1fr}
+    nav{padding:1rem 1.5rem}
+    .nav-links{display:none}
+    section{padding:3rem 1.5rem}
+    footer{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
@@ -118,9 +158,8 @@
     <li><a href="index.html">Home</a></li>
     <li><a href="workshops.html">Workshops</a></li>
     <li><a href="#formats">Formats</a></li>
-    <li><a href="#culturefest">CultureFest</a></li>
   </ul>
-  <a href="workshops.html#signup" class="nav-cta">Sign Up →</a>
+  <a href="#signup" class="nav-cta">Sign Up →</a>
 </nav>
 
 <div class="page-header">
@@ -137,36 +176,81 @@
     <p class="section-label">Workshop Formats</p>
     <h2 class="section-title">Choose Your Format</h2>
     <div class="format-intro">
-      <p>We offer two workshop formats — a multi-day deep-dive series and a single-day bootcamp. Both are free for nonprofit and publicly sponsored institutions. Detailed curricula coming soon!</p>
+      <p>We offer two workshop formats — a multi-day deep-dive series and a single-day bootcamp. Both are free for nonprofit and publicly sponsored institutions. Flip a card to see the full schedule.</p>
     </div>
 
     <div class="format-cards">
 
       <div class="format-card" id="multiday">
-        <div class="fc-top">
-          <div class="fc-icon">📅</div>
-          <h3 class="fc-title">Multi-Day Workshop</h3>
-          <span class="fc-dur">45 min – 1 hr · 4–5 Days</span>
-        </div>
-        <div class="fc-body">
-          <p>Our full-depth AI learning series spanning multiple sessions. Students build knowledge day by day — from the basics of algorithms all the way to a final project they present to parents on the last day.</p>
-          <p>Each day covers a new theme: Algorithms, Machine Learning, Creative Collaboration, and two Project Days. Volunteers guide every station so every student gets real support.</p>
-          <span class="fc-for">🏫 For nonprofits &amp; publicly sponsored institutions</span>
-          <a href="workshops.html#signup" class="fc-cta">Sign Up for This Workshop →</a>
+        <div class="fc-flip">
+
+          <div class="fc-front">
+            <div class="fc-top">
+              <div class="fc-icon">📅</div>
+              <h3 class="fc-title">Multi-Day Workshop</h3>
+              <span class="fc-dur">45 min – 1 hr · 4–5 Days</span>
+            </div>
+            <div class="fc-body">
+              <p>Our full-depth AI learning series, built day by day — from how computers see and learn, to creative collaboration, and finally a hands-on project students present to parents on the last day.</p>
+              <p>Each day explores a new theme — Algorithms, Machine Learning, Creative Collaboration, and two Project Days — using hands-on tools like Teachable Machine, Scratch, and AI Duet, plus icebreaker games that make big AI concepts click. Volunteers guide every station so every student gets real support.</p>
+              <span class="fc-for">🏫 Best for Long Term Full Project</span>
+              <div class="fc-actions">
+                <button class="fc-more-btn" onclick="flipCard(this)">Full Schedule <span class="fc-arrow">↻</span></button>
+                <a href="workshops.html#signup" class="fc-cta">Sign Up →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="fc-back">
+            <div class="fc-back-top">
+              <h4>📅 Full 5-Day Schedule</h4>
+              <button class="fc-flip-back" onclick="flipCard(this)">↺ Back</button>
+            </div>
+            <ul class="fc-schedule">
+              <li><strong>Day 1 — Basics of Algorithms:</strong> Pictionary AI, a quick intro to Scratch, and the "Intelligent Paper" algorithm activity.</li>
+              <li><strong>Day 2 — Basics of Machine Learning:</strong> Semantris for language patterns, plus hands-on training with Code.org and Google Teachable Machine.</li>
+              <li><strong>Day 3 — Creative Collaboration:</strong> AI Duet music-making and building a personalized chatbot with Landbot.</li>
+              <li><strong>Day 4 — Project Day:</strong> The "Human Neural Network" game, then small-group projects — Machine Learning for Kids, Face Sensing, and Smart Classroom in Scratch.</li>
+              <li><strong>Day 5 — Project Day:</strong> Final work time, a showcase for parents, and take-home resources to keep learning.</li>
+            </ul>
+          </div>
+
         </div>
       </div>
 
       <div class="format-card" id="singleday">
-        <div class="fc-top">
-          <div class="fc-icon">⚡</div>
-          <h3 class="fc-title">Single-Day Bootcamp</h3>
-          <span class="fc-dur">3–4 Hours · One Day</span>
-        </div>
-        <div class="fc-body">
-          <p>The complete AI experience packed into one powerful session. Students go from zero to trained ML model in just a few hours — with games, unplugged activities, a mini-project, and a gallery walk showcase.</p>
-          <p>Perfect for community events, school days, or a student's very first encounter with artificial intelligence. No prior experience needed — just curiosity.</p>
-          <span class="fc-for">🌍 Great for community events &amp; school days</span>
-          <a href="workshops.html#signup" class="fc-cta">Sign Up for This Workshop →</a>
+        <div class="fc-flip">
+
+          <div class="fc-front">
+            <div class="fc-top">
+              <div class="fc-icon">⚡</div>
+              <h3 class="fc-title">Single-Day Bootcamp</h3>
+              <span class="fc-dur">3–4 Hours · One Day</span>
+            </div>
+            <div class="fc-body">
+              <p>The complete AI experience, condensed into one energizing session. In just a few hours, students go from training their first computer-vision model to building a working mini AI project — no prior experience needed, just curiosity.</p>
+              <p>The day blends hands-on tech, unplugged games, and a final project students get to show off, so even first-timers leave having actually built something with AI.</p>
+              <span class="fc-for">🏫 Best for Short Term Mini Project</span>
+              <div class="fc-actions">
+                <button class="fc-more-btn" onclick="flipCard(this)">Full Schedule <span class="fc-arrow">↻</span></button>
+                <a href="workshops.html#signup" class="fc-cta">Sign Up →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="fc-back">
+            <div class="fc-back-top">
+              <h4>⚡ Full Session Breakdown</h4>
+              <button class="fc-flip-back" onclick="flipCard(this)">↺ Back</button>
+            </div>
+            <ul class="fc-schedule">
+              <li><strong>Phase 1 — How Computers See:</strong> The Quick, Draw! doodle game, then training a Teachable Machine model to tell happy vs. silly faces apart.</li>
+              <li><strong>Phase 2 — How Computers Talk &amp; Create:</strong> An unplugged "Human Neural Network" game, plus AI Duet and Semantris for music and language.</li>
+              <li><strong>Phase 3 — Mini-Project:</strong> Building a "Smart Classroom" in Scratch with Machine Learning for Kids, followed by a gallery walk to see everyone's projects.</li>
+              <li><strong>Phase 4 — Wrap-Up:</strong> A Junior AI Scientist certificate, plus a take-home QR code so families can keep exploring.</li>
+            </ul>
+          </div>
+
         </div>
       </div>
 
@@ -174,12 +258,12 @@
 
     <div class="coming-soon">
       <span>🚧</span>
-      <p>Full curriculum breakdowns with day-by-day schedules and activity details are coming soon. Check back after CultureFest!</p>
+      <p>Full curriculum breakdowns with day-by-day schedules and activity details are coming soon.</p>
     </div>
   </div>
 </section>
 
-<!-- CULTUREFEST DETAILS -->
+<!-- CULTUREFEST DETAILS 
 <section class="cf-section" id="culturefest">
   <div class="inner">
     <p class="section-label">Upcoming Event</p>
@@ -237,16 +321,18 @@
     </div>
   </div>
 </section>
+-->
 
 <!-- CTA -->
-<div class="cta-band">
-  <h2>Ready to Host a Workshop?</h2>
-  <p>We bring the curriculum, volunteers, and energy. You bring the students and the space. Let's make it happen.</p>
-  <div class="cta-btns">
-    <a href="workshops.html#signup" class="btn-w">📝 Sign Up Now</a>
-    <a href="index.html" class="btn-ow">← Back to Home</a>
+<section class="signup" id="signup">
+  <h2>Ready to Join?</h2>
+  <p>Sign up to be notified about upcoming workshops, secure your spot at CultureFest, and let us know how many you're bringing.</p>
+  <div class="su-btns">
+    <a href="https://forms.gle/yourformlink" target="_blank" class="btn-w">📝 Sign Up via Google Form</a>
+    <button class="btn-ow" onclick="openGmailDraft()">📧 Contact Us</button>
   </div>
-</div>
+  <p style="margin-top:1.5rem;font-size:.85rem;opacity:.6">All workshops are free for qualifying schools &amp; nonprofits · Location TBD for workshops</p>
+</section>
 
 <footer>
   <div>
@@ -271,6 +357,18 @@
   function toggle(el) {
     el.classList.toggle('done');
     el.textContent = el.classList.contains('done') ? '✓' : '';
+  }
+
+  // Flips the card that contains the clicked button (works from either face)
+  function flipCard(btn) {
+    const card = btn.closest('.format-card');
+    card.classList.toggle('flipped');
+  }
+
+  function openGmailDraft() {
+    const to = encodeURIComponent("theinvenireai@gmail.com");
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}`;
+    window.open(gmailUrl, "_blank");
   }
 </script>
 </body>
