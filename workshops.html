@@ -108,7 +108,7 @@
   .su-btns{display:flex;gap:1rem;justify-content:center;margin-top:2rem;flex-wrap:wrap}
   .btn-w{background:#fff;color:var(--blue-deep);padding:.85rem 2rem;border-radius:2rem;font-weight:700;text-decoration:none;font-size:1rem;transition:transform .15s}
   .btn-w:hover{transform:translateY(-2px)}
-  .btn-ow{background:transparent;color:#fff;border:2px solid #ffffff55;padding:.85rem 2rem;border-radius:2rem;font-weight:600;text-decoration:none;font-size:1rem;transition:border-color .2s}
+  .btn-ow{background:transparent;color:#fff;border:2px solid #ffffff55;padding:.85rem 2rem;border-radius:2rem;font-weight:600;text-decoration:none;font-size:1rem;cursor:pointer;font-family:inherit;transition:border-color .2s}
   .btn-ow:hover{border-color:#fff}
 
   footer{background:#060f1e;color:#fff;padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem}
@@ -167,14 +167,7 @@
 
       <div class="ev-sidebar">
         <h3>📌 Upcoming Events</h3>
-        <div class="ev-row">
-          <div class="ev-box gold"><span class="evb-d">27</span><span class="evb-m">Apr</span></div>
-          <div class="ev-info">
-            <h4>CultureFest 2026 — AI Booth</h4>
-            <p>5:00 PM – 8:00 PM · Franklin High School</p>
-            <span class="ev-chip chip-gold">🌍 Booth Event</span>
-          </div>
-        </div>
+        <!-- Annual CultureFest -->
         <div class="ev-row">
           <div class="ev-box blue"><span class="evb-d">TBD</span><span class="evb-m">2026</span></div>
           <div class="ev-info">
@@ -196,7 +189,7 @@
   </div>
 </section>
 
-<!-- CULTUREFEST SPOTLIGHT -->
+<!-- CULTUREFEST SPOTLIGHT 
 <section class="cf-section" id="culturefest">
   <div class="inner">
     <p class="section-label">Featured Event</p>
@@ -244,6 +237,7 @@
     </div>
   </div>
 </section>
+-->
 
 <!-- WORKSHOP TYPES -->
 <section class="workshops-section" id="workshops">
@@ -275,7 +269,7 @@
   <p>Sign up to be notified about upcoming workshops, secure your spot at CultureFest, and let us know how many you're bringing.</p>
   <div class="su-btns">
     <a href="https://forms.gle/yourformlink" target="_blank" class="btn-w">📝 Sign Up via Google Form</a>
-    <a href="mailto:hello@invenire.ai" class="btn-ow">📧 Contact Us</a>
+    <button class="btn-ow" onclick="openGmailDraft()">📧 Contact Us</button>
   </div>
   <p style="margin-top:1.5rem;font-size:.85rem;opacity:.6">All workshops are free for qualifying schools &amp; nonprofits · Location TBD for workshops</p>
 </section>
@@ -290,11 +284,13 @@
     <a href="index.html">Home</a>
     <a href="workshops.html">Workshops</a>
     <a href="workshop-info.html">Workshop Info</a>
+    <a href="#event-calendar">Event Calendar</a>
+    <a href="#workshops">Our Workshops</a>
   </div>
   <div class="footer-col">
     <h4>Contact</h4>
-    <p>📧 hello@invenire.ai</p>
-    <p>📷 @invenire.ai</p>
+    <p>theinvenireai@gmail.com</p>
+    <p>Franklin and Oak Creek, WI</p>
   </div>
 </footer>
 <div class="footer-bottom">© 2026 Invenire AI · All rights reserved</div>
@@ -302,7 +298,11 @@
 <script>
   const EVENTS = { '2026-04-27': 'CultureFest 2026 — AI Booth' };
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  let cy = 2026, cm = 3; // start on April
+
+  // Default the calendar to the current month/year
+  const todayInit = new Date();
+  let cy = todayInit.getFullYear();
+  let cm = todayInit.getMonth();
 
   function renderCal() {
     document.getElementById('calLabel').textContent = MONTHS[cm] + ' ' + cy;
@@ -338,6 +338,17 @@
   }
 
   renderCal();
+
+  function openGmailDraft() {
+    // Encode the recipient address to handle special characters
+    const to = encodeURIComponent("theinvenireai@gmail.com");
+
+    // Gmail compose URL with the "to" field pre-filled
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}`;
+
+    // Open Gmail in a new tab
+    window.open(gmailUrl, "_blank");
+  }
 </script>
 </body>
 </html>
